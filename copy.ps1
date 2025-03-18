@@ -6,7 +6,13 @@ param (
     [Parameter(Mandatory=$false)]
     [Switch]$release,
     [Parameter(Mandatory=$false)]
-    [Switch]$log
+    [Switch]$log,
+    [Parameter(Mandatory=$false)]
+    [Switch] $self,
+    [Parameter(Mandatory=$false)]
+    [Switch] $file,
+    [Parameter(Mandatory=$false)]
+    [Switch] $all
 )
 
 & $PSScriptRoot/build.ps1 -clean:$clean -release:$release
@@ -16,17 +22,11 @@ if (-not ($LastExitCode -eq 0)) {
 }
 
 if ($useDebug -eq $true) {
-    $fileName = Get-ChildItem lib*.so -Path "build/debug" -Name
+    & adb push build/debug/libtrick-saber.so /sdcard/ModData/com.beatgames.beatsaber/Modloader/mods/libtrick-saber.so
 } else {
-    $fileName = Get-ChildItem lib*.so -Path "build/" -Name
+    & adb push build/libtrick-saber.so /sdcard/ModData/com.beatgames.beatsaber/Modloader/mods/libtrick-saber.so
 }
 
-& adb push build/$fileName /sdcard/ModData/com.beatgames.beatsaber/Modloader/mods/$fileName
+& $PSScriptRoot/restart-game.ps1
 
-& adb shell am force-stop com.beatgames.beatsaber
-& adb shell am start com.beatgames.beatsaber/com.unity3d.player.UnityPlayerActivity
-Start-Sleep -Seconds 1.0
-& adb shell am start com.beatgames.beatsaber/com.unity3d.player.UnityPlayerActivity
-if ($log.IsPresent) {
-    & ./log.ps1
-}
+if ($log -eq $true) { & $PSScriptRoot/start-logging.ps1 -self:$self -all:$all -custom:$custom -file:$file }
