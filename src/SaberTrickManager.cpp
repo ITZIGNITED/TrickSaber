@@ -177,10 +177,9 @@ namespace TrickSaber {
     }
 
     bool SaberTrickManager::IsDoingTrick() {
-        auto values = _tricks->get_Values();
-        auto iter = values->GetEnumerator();
+        auto iter = _tricks->GetEnumerator();
         while (iter.MoveNext()) {
-            if (reinterpret_cast<Tricks::Trick*>(iter.get_Current())->_trickState != TrickState::Inactive) return true;
+            if (reinterpret_cast<Tricks::Trick*>(iter.get_Current().get_Value())->_trickState != TrickState::Inactive) return true;
         }
         iter.Dispose();
 

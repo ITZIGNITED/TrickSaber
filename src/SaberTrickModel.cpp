@@ -72,6 +72,7 @@ namespace TrickSaber {
     }
 
     custom_types::Helpers::Coroutine SaberTrickModel::GetSaberModel(GlobalNamespace::Saber* saber, UnityEngine::GameObject*& result) {
+        static auto GetModelController = CRASH_UNLESS(il2cpp_utils::resolve_icall<::UnityEngine::Component*, ::UnityEngine::GameObject*, ::System::Type*, bool>("UnityEngine.GameObject::GetComponentInChildren"));
         GlobalNamespace::SaberModelController* smc = nullptr;
 
         static constexpr const float timeout = 2.0f;
@@ -79,13 +80,23 @@ namespace TrickSaber {
         float time = 0;
 
         while (!smc && saber && saber->m_CachedPtr.m_value) {
-            smc = saber->GetComponentInChildren<GlobalNamespace::SaberModelController*>(true);
-            if (smc) {
-                result = smc->get_gameObject();
+            UnityEngine::Component* component = GetModelController(saber->get_gameObject(), csTypeOf(GlobalNamespace::SaberModelController*), true);
+            if (component != nullptr && component->m_CachedPtr.m_value != nullptr) {
+                result = component->get_gameObject();
+                if (!result) {
+                    WARNING("Saber model not found! Retrying...");
+                } else {
+                    co_return;
+                }
                 co_return;
+            } else {
+                WARNING("Saber model not found! Retrying...");
             }
 
-            if (time > timeout) break;
+            if (time > timeout) {
+                DEBUG("Saber model not found! Timeout reached.");
+                break;
+            };
 
             time += interval;
             co_yield reinterpret_cast<System::Collections::IEnumerator*>(UnityEngine::WaitForSeconds::New_ctor(interval));
