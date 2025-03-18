@@ -7,7 +7,7 @@
 #include "Tricks/ThrowTrick.hpp"
 
 #include "System/Action.hpp"
-#include "GlobalNamespace/SharedCoroutineStarter.hpp"
+#include "bsml/shared/BSML/SharedCoroutineStarter.hpp"
 
 #include "custom-types/shared/delegate.hpp"
 
@@ -20,12 +20,12 @@ namespace TrickSaber {
         DEBUG("LeftSaberTrickManager ctor");
         custom_types::InvokeBaseCtor(classof(SaberTrickManager*), this);
     }
-    
+
     void RightSaberTrickManager::ctor() {
         DEBUG("RightSaberTrickManager ctor");
         custom_types::InvokeBaseCtor(classof(SaberTrickManager*), this);
     }
-    
+
     void SaberTrickManager::ctor() {
         DEBUG("ctor");
         _tricks = TrickDictionary::New_ctor();
@@ -50,7 +50,7 @@ namespace TrickSaber {
     void SaberTrickManager::Init(GlobalTrickManager* globalTrickManager) {
         _globalTrickManager = globalTrickManager;
         _inited = false;
-        GlobalNamespace::SharedCoroutineStarter::get_instance()->StartCoroutine(custom_types::Helpers::CoroutineHelper::New(InitAsync()));
+        BSML::SharedCoroutineStarter::get_instance()->StartCoroutine(custom_types::Helpers::CoroutineHelper::New(InitAsync()));
     }
 
     custom_types::Helpers::Coroutine SaberTrickManager::InitAsync() {
@@ -68,12 +68,12 @@ namespace TrickSaber {
 
         _movementController->Init(_vrController, this);
 
-        _inputManager->Init(_saber->get_saberType(), _vrController->vrControllersInputManager);
+        _inputManager->Init(_saber->get_saberType());
         _inputManager->trickActivated += { &SaberTrickManager::OnTrickActivated, this };
         _inputManager->trickDeactivated += { &SaberTrickManager::OnTrickDeactivated, this };
 
         auto success = false;
-        co_yield reinterpret_cast<System::Collections::IEnumerator*>(GlobalNamespace::SharedCoroutineStarter::get_instance()->StartCoroutine(custom_types::Helpers::CoroutineHelper::New(_saberTrickModel->Init(_saber, success))));
+        co_yield reinterpret_cast<System::Collections::IEnumerator*>(BSML::SharedCoroutineStarter::get_instance()->StartCoroutine(custom_types::Helpers::CoroutineHelper::New(_saberTrickModel->Init(_saber, success))));
 
         if (success) INFO("Got saber model");
         else {
@@ -101,7 +101,7 @@ namespace TrickSaber {
         co_return;
     }
     Tricks::Trick* SaberTrickManager::GetTrick(TrickAction trickAction) {
-        union { 
+        union {
             Il2CppObject* obj = nullptr;
             Tricks::Trick* trick;
         };
@@ -160,7 +160,7 @@ namespace TrickSaber {
     }
 
     void SaberTrickManager::AddTrick(System::Type* type) {
-        auto trick = reinterpret_cast<Tricks::Trick*>(_container->InstantiateComponent(type, get_gameObject()));
+        auto trick = reinterpret_cast<Tricks::Trick*>(_container->InstantiateComponent(type, get_gameObject()).ptr());
         //auto trick = _trickFactory->Create(type, get_gameObject());
         trick->Init(this, _movementController);
         trick->trickStarted += {&SaberTrickManager::OnTrickStart, this };

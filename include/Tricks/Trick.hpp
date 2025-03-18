@@ -20,7 +20,7 @@ namespace TrickSaber {
     class SaberTrickManager;
 }
 
-DECLARE_CLASS_CODEGEN(TrickSaber::Tricks, Trick, UnityEngine::MonoBehaviour,
+DECLARE_CLASS_CODEGEN(TrickSaber::Tricks, Trick, UnityEngine::MonoBehaviour) {
     DECLARE_INSTANCE_FIELD(bool, _endRequested);
     DECLARE_INSTANCE_FIELD(::TrickSaber::TrickState, _trickState);
     DECLARE_INSTANCE_FIELD(::TrickSaber::TrickAction, _trickAction);
@@ -49,14 +49,14 @@ DECLARE_CLASS_CODEGEN(TrickSaber::Tricks, Trick, UnityEngine::MonoBehaviour,
         UnorderedEventCallback<::TrickSaber::TrickAction> trickStarted;
         UnorderedEventCallback<::TrickSaber::TrickAction> trickEnding;
         UnorderedEventCallback<::TrickSaber::TrickAction> trickEnded;
-)
+};
 
 
 using Trick_PlaceholderFactory_Base = ::Zenject::PlaceholderFactory_3<::System::Type*, ::UnityEngine::GameObject*, ::TrickSaber::Tricks::Trick*>;
 
-DECLARE_CLASS_CODEGEN(TrickSaber::Tricks, TrickFactory, Trick_PlaceholderFactory_Base,
+DECLARE_CLASS_CODEGEN(TrickSaber::Tricks, TrickFactory, Trick_PlaceholderFactory_Base) {
     DECLARE_CTOR(ctor);
-)
+};
 
 using Trick_CustomFactory_Base = ::Zenject::IFactory_3<::System::Type*, ::UnityEngine::GameObject*, ::TrickSaber::Tricks::Trick*>;
 
@@ -70,9 +70,9 @@ struct ::il2cpp_utils::il2cpp_type_check::MetadataGetter<static_cast<::TrickSabe
     }
 };
 
-DECLARE_CLASS_CODEGEN(TrickSaber::Tricks, TrickCustomFactory, Trick_PlaceholderFactory_Base, 
-    DECLARE_PRIVATE_FIELD(::Zenject::DiContainer*, _container);
+DECLARE_CLASS_CODEGEN(TrickSaber::Tricks, TrickCustomFactory, Trick_PlaceholderFactory_Base) {
+    DECLARE_INSTANCE_FIELD_PRIVATE(::Zenject::DiContainer*, _container);
     DECLARE_CTOR(ctor, ::Zenject::DiContainer* container);
 
     DECLARE_OVERRIDE_METHOD(::TrickSaber::Tricks::Trick*, Create, il2cpp_utils::il2cpp_type_check::MetadataGetter<&Trick_CustomFactory_Base::Create>::get(), ::System::Type* type, ::UnityEngine::GameObject* gameObject);
-)
+};

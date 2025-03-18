@@ -18,7 +18,7 @@ namespace TrickSaber::InputHandling {
         INVOKE_CTOR();
     }
 
-    void InputManager::Init(GlobalNamespace::SaberType saberType, GlobalNamespace::VRControllersInputManager* vrControllersInputManager) {
+    void InputManager::Init(GlobalNamespace::SaberType saberType) {
         GlobalNamespace::OVRInput::Controller oculusController;
         UnityEngine::XR::XRNode node;
         if (saberType == GlobalNamespace::SaberType::SaberA)
@@ -52,7 +52,7 @@ namespace TrickSaber::InputHandling {
             float val = 0.0f;
             if (CheckHandlersDown(handlers, val))
                 trickActivated.invoke(trickAction, val);
-            else if (CheckHandlersUp(handlers)) 
+            else if (CheckHandlersUp(handlers))
                 trickDeactivated.invoke(trickAction);
         }
     }

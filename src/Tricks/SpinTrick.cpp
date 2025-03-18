@@ -27,7 +27,10 @@ namespace TrickSaber::Tricks {
         if (_isVelocityDependent) {
             auto angularVelocity = _movementController->GetAverageAngularVelocity();
             _spinSpeed = std::abs(angularVelocity.x) + std::abs(angularVelocity.y);
-            angularVelocity = Sombrero::FastQuaternion::Inverse(_movementController->get_controllerRotation()) * angularVelocity;
+            angularVelocity =
+                UnityEngine::Quaternion::op_Multiply(Sombrero::FastQuaternion::Inverse(_movementController->get_controllerRotation()),
+            angularVelocity
+            );
             if (angularVelocity.x < 0) _spinSpeed *= -1;
         } else {
             auto speed = 30;

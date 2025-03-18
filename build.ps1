@@ -5,26 +5,23 @@ Param(
     [Switch]$release
 )
 
-# if user specified clean, remove all build files
-if ($clean.IsPresent)
-{
-    if (Test-Path -Path "build")
-    {
-        remove-item build -R
-    }
+$buildType = "Debug"
+if ($release.IsPresent) {
+    $buildType = "RelWithDebInfo"
+    echo "Building release"
+} else {
+    echo "Building debug"
 }
 
+$NDKPath = Get-Content $PSScriptRoot/ndkpath.txt
+
+# if user specified clean, remove all build files
 if (($clean.IsPresent) -or (-not (Test-Path -Path "build")))
 {
     $out = new-item -Path build -ItemType Directory
 }
 
-$buildType = "Debug"
-if ($release.IsPresent) {
-    $buildType = "RelWithDebInfo"
-}
-
-& cmake -G "Ninja" -DCMAKE_BUILD_TYPE="$buildType" -B build
+& cmake -G "Ninja" -DCMAKE_BUILD_TYPE="$buildType" . -B build
 & cmake --build ./build
-
-exit $LastExitCode
+$ExitCode = $LastExitCode
+exit $ExitCode

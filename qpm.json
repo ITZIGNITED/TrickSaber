@@ -1,4 +1,5 @@
 {
+  "version": "0.4.0",
   "sharedDir": "shared",
   "dependenciesDir": "extern",
   "info": {
@@ -7,64 +8,77 @@
     "version": "0.0.1",
     "url": "https://github.com/RedBrumbler/TrickSaber",
     "additionalData": {
-      "overrideSoName": "libtrick-saber.so"
+      "overrideSoName": "libtrick-saber.so",
+      "cmake": true
     }
+  },
+  "workspace": {
+    "scripts": {},
+    "ndk": "^27.2.12479018",
+    "qmodIncludeDirs": [],
+    "qmodIncludeFiles": [],
+    "qmodOutput": null
   },
   "dependencies": [
     {
       "id": "beatsaber-hook",
-      "versionRange": "^3.14.0",
-      "additionalData": {
-        "extraFiles": [
-          "src/inline-hook"
-        ]
-      }
+      "versionRange": "^6.4.1",
+      "additionalData": {}
     },
     {
-      "id": "codegen",
-      "versionRange": "^0.33.0",
+      "id": "bs-cordl",
+      "versionRange": "^4030.0.0",
       "additionalData": {}
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.15.24",
-      "additionalData": {}
+      "versionRange": "^0.18.2",
+      "additionalData": {
+        "private": true
+      }
     },
     {
-      "id": "modloader",
-      "versionRange": "^1.2.3",
-      "additionalData": {}
+      "id": "scotland2",
+      "versionRange": "^0.1.6",
+      "additionalData": {
+        "includeQmod": false
+      }
     },
     {
-      "id": "paper",
-      "versionRange": "^1.2.9",
+      "id": "paper2_scotland2",
+      "versionRange": "^4.5.0",
       "additionalData": {}
     },
     {
       "id": "lapiz",
-      "versionRange": "^0.1.11",
-      "additionalData": {}
+      "versionRange": "^0.2.16",
+      "additionalData": {
+        "private": true
+      }
     },
     {
       "id": "sombrero",
       "versionRange": "^0.1.37",
-      "additionalData": {}
+      "additionalData": {
+        "private": true
+      }
     },
     {
       "id": "bsml",
-      "versionRange": "^0.3.3",
-      "additionalData": {}
+      "versionRange": "^0.4.24",
+      "additionalData": {
+        "private": true
+      }
     },
     {
       "id": "bs-utils",
-      "versionRange": "^0.7.2",
+      "versionRange": "^0.8.6",
       "additionalData": {}
     },
     {
       "id": "conditional-dependencies",
-      "versionRange": "^0.1.0",
+      "versionRange": "^0.3.0",
       "additionalData": {}
     }
-  ],
-  "additionalData": {}
+  ]
 }

@@ -3,7 +3,7 @@ name: NDK build
 on:
   workflow_dispatch:
   push:
-    branches: 
+    branches:
       - master
     paths-ignore:
       - '**.yml'
@@ -19,78 +19,41 @@ on:
       - '**.md'
       - '.gitignore'
   pull_request:
-    branches: 
+    branches:
       - master
 
 env:
     module_id: trick-saber
     qmodName: TrickSaber
+    cache-name: BSS_cache
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: FranzDiebold/github-env-vars-action@v2
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       name: Checkout
       with:
         submodules: true
         lfs: true
-    
-    - uses: seanmiddleditch/gha-setup-ninja@v3
 
-    - name: Create ndkpath.txt
-      run: |
-        echo "$ANDROID_NDK_LATEST_HOME" > ${GITHUB_WORKSPACE}/ndkpath.txt
-        cat ${GITHUB_WORKSPACE}/ndkpath.txt
+    - uses: seanmiddleditch/gha-setup-ninja@v5
 
     - name: Get QPM
-      if: steps.cache-qpm.outputs.cache-hit != 'true'
-      uses: dawidd6/action-download-artifact@v2
+      uses: Fernthedev/qpm-action@v1
       with:
-        github_token: ${{secrets.GITHUB_TOKEN}}
-        workflow: cargo-build.yml
-        name: linux-qpm-rust
-        path: QPM
-        repo: RedBrumbler/QuestPackageManager-Rust
-        
-    - name: QPM Collapse
-      run: |
-        chmod +x ./QPM/qpm-rust
-        ./QPM/qpm-rust collapse
-    
-    - name: QPM Dependencies Cache
-      id: cache-qpm-deps
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-qpm-deps
-      with:
-        path: /home/runner/.local/share/QPM-Rust/cache
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('qpm.json') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
+        resolve_ndk: true
+        #required
+        workflow_token: ${{secrets.GITHUB_TOKEN}}
+        restore: true # will run restore on download
+        cache: true #will cache dependencies
 
-    - name: QPM Restore
-      run: |
-        ./QPM/qpm-rust restore
-
-    - name: List Post Restore
-      run: |
-        echo includes:
-        ls -la ${GITHUB_WORKSPACE}/extern/includes
-        echo libs:
-        ls -la ${GITHUB_WORKSPACE}/extern/libs
-        echo cache:
-        ls -la $HOME/.local/share/QPM-Rust/cache
-      
     - name: Build
       run: |
         cd ${GITHUB_WORKSPACE}
-        ./QPM/qpm-rust qmod build
-        pwsh -Command ./build.ps1
+        qpm qmod build
+        pwsh -Command ./build.ps1 -release
 
     - name: Create Qmod
       run: |
@@ -102,18 +65,25 @@ jobs:
         cd ./build/
         pattern="lib${module_id}*.so"
         files=( $pattern )
-        echo ::set-output name=NAME::"${files[0]}"
-    
-    - name: Check if webhook secret set
-      id: webhook-set
-      run: echo ::set-output name=EXISTS::"${{secrets.DISCORD_WEBHOOK_URL != ''}}"
-      
-    - name: Publish qmod to webhook
-      if: ${{ steps.webhook-set.outputs.EXISTS }}
-      uses: tsickert/discord-webhook@v3.2.0
+        echo "NAME=${files[0]}" >> ${GITHUB_OUTPUT}
+
+    - name: Upload non-debug artifact
+      uses: actions/upload-artifact@v4
       with:
-        webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        content: "${{ env.CI_SHA_SHORT }} - `${{ github.event.head_commit.message }}`"
-        username: "${{ github.repository }}"
-        avatar-url: "http://github.com/${{ env.CI_ACTOR }}.png"
-        filename: ./${{ env.qmodName }}.qmod
+        name: ${{ steps.libname.outputs.NAME }}
+        path: ./build/${{ steps.libname.outputs.NAME }}
+        if-no-files-found: error
+
+    - name: Upload qmod artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{env.qmodName}}.qmod
+        path: ./${{ env.qmodName }}.qmod
+        if-no-files-found: error
+
+    - name: Upload debug artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: debug_${{ steps.libname.outputs.NAME }}
+        path: ./build/debug/${{ steps.libname.outputs.NAME }}
+        if-no-files-found: error

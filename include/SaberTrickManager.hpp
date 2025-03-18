@@ -22,26 +22,26 @@ namespace TrickSaber {
     class GlobalTrickManager;
 }
 
-DECLARE_CLASS_CODEGEN(TrickSaber, SaberTrickManager, UnityEngine::MonoBehaviour,
+DECLARE_CLASS_CODEGEN(TrickSaber, SaberTrickManager, UnityEngine::MonoBehaviour) {
     using TrickDictionary = System::Collections::Generic::Dictionary_2<::TrickSaber::TrickAction, ::Il2CppObject*>;
-    DECLARE_PRIVATE_FIELD(TrickDictionary*, _tricks);
+    DECLARE_INSTANCE_FIELD_PRIVATE(TrickDictionary*, _tricks);
     DECLARE_INSTANCE_METHOD(TrickDictionary*, get_tricks);
-    DECLARE_PRIVATE_FIELD(SaberTrickModel*, _saberTrickModel);
+    DECLARE_INSTANCE_FIELD_PRIVATE(SaberTrickModel*, _saberTrickModel);
     DECLARE_INSTANCE_METHOD(SaberTrickModel*, get_saberTrickModel);
-    DECLARE_PRIVATE_FIELD(bool, _managerEnabled);
+    DECLARE_INSTANCE_FIELD_PRIVATE(bool, _managerEnabled);
     DECLARE_INSTANCE_METHOD(bool, get_managerEnabled);
     DECLARE_INSTANCE_METHOD(void, set_managerEnabled, bool value);
     DECLARE_INSTANCE_METHOD(bool, get_isLeftSaber);
-    DECLARE_PRIVATE_FIELD(GlobalNamespace::VRController*, _vrController);
-    DECLARE_PRIVATE_FIELD(GlobalNamespace::Saber*, _saber);
+    DECLARE_INSTANCE_FIELD_PRIVATE(GlobalNamespace::VRController*, _vrController);
+    DECLARE_INSTANCE_FIELD_PRIVATE(GlobalNamespace::Saber*, _saber);
     DECLARE_INSTANCE_FIELD_NAME(GlobalTrickManager*, _globalTrickManager, "TrickSaber", "GlobalTrickManager");
     DECLARE_INSTANCE_FIELD(GlobalNamespace::PauseController*, _pauseController);
-    DECLARE_PRIVATE_FIELD(TrickSaber::MovementController*, _movementController);
-    DECLARE_PRIVATE_FIELD(TrickSaber::InputHandling::InputManager*, _inputManager);
-    DECLARE_PRIVATE_FIELD(GlobalNamespace::AudioTimeSyncController*, _audioTimeSyncController);
-    DECLARE_PRIVATE_FIELD(TrickSaber::Tricks::TrickCustomFactory*, _trickFactory);
-    DECLARE_PRIVATE_FIELD(::Zenject::DiContainer*, _container);
-    DECLARE_PRIVATE_FIELD(bool, _inited);
+    DECLARE_INSTANCE_FIELD_PRIVATE(TrickSaber::MovementController*, _movementController);
+    DECLARE_INSTANCE_FIELD_PRIVATE(TrickSaber::InputHandling::InputManager*, _inputManager);
+    DECLARE_INSTANCE_FIELD_PRIVATE(GlobalNamespace::AudioTimeSyncController*, _audioTimeSyncController);
+    DECLARE_INSTANCE_FIELD_PRIVATE(TrickSaber::Tricks::TrickCustomFactory*, _trickFactory);
+    DECLARE_INSTANCE_FIELD_PRIVATE(::Zenject::DiContainer*, _container);
+    DECLARE_INSTANCE_FIELD_PRIVATE(bool, _inited);
 
     DECLARE_INJECT_METHOD(void, Inject, Zenject::DiContainer* container, TrickSaber::MovementController* movementController, TrickSaber::InputHandling::InputManager* inputManager, TrickSaber::SaberControllerBearer* saberControllerBearer, GlobalNamespace::SaberType saberType, SaberTrickModel* saberTrickModel, GlobalNamespace::AudioTimeSyncController* audioTimeSyncController/*, TrickSaber::Tricks::TrickCustomFactory* trickFactory*/);
     DECLARE_PRIVATE_METHOD(void, Cleanup);
@@ -70,15 +70,14 @@ DECLARE_CLASS_CODEGEN(TrickSaber, SaberTrickManager, UnityEngine::MonoBehaviour,
         void AddTrick(System::Type* type);
 
         custom_types::Helpers::Coroutine InitAsync();
-)
+};
 
 // named type because inject with ID is stupid
-DECLARE_CLASS_CUSTOM(TrickSaber, LeftSaberTrickManager, TrickSaber::SaberTrickManager,
+DECLARE_CLASS_CUSTOM(TrickSaber, LeftSaberTrickManager, TrickSaber::SaberTrickManager) {
     DECLARE_CTOR(ctor);
-)
+};
 
 // named type because inject with ID is stupid
-DECLARE_CLASS_CUSTOM(TrickSaber, RightSaberTrickManager, TrickSaber::SaberTrickManager,
+DECLARE_CLASS_CUSTOM(TrickSaber, RightSaberTrickManager, TrickSaber::SaberTrickManager) {
     DECLARE_CTOR(ctor);
-)
-
+};

@@ -4,12 +4,12 @@
 #include "UnityEngine/Transform.hpp"
 #include "custom-types/shared/coroutine.hpp"
 
-DECLARE_CLASS_CUSTOM(TrickSaber::Tricks, SpinTrick, TrickSaber::Tricks::Trick,
-    DECLARE_PRIVATE_FIELD(bool, _isVelocityDependent);
-    DECLARE_PRIVATE_FIELD(UnityEngine::Transform*, _saberModelTransform);
-    DECLARE_PRIVATE_FIELD(float, _spinSpeed);
-    DECLARE_PRIVATE_FIELD(float, _largestSpinSpeed);
-    DECLARE_PRIVATE_FIELD(float, _finalSpinSpeed);
+DECLARE_CLASS_CUSTOM(TrickSaber::Tricks, SpinTrick, TrickSaber::Tricks::Trick) {
+    DECLARE_INSTANCE_FIELD_PRIVATE(bool, _isVelocityDependent);
+    DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Transform*, _saberModelTransform);
+    DECLARE_INSTANCE_FIELD_PRIVATE(float, _spinSpeed);
+    DECLARE_INSTANCE_FIELD_PRIVATE(float, _largestSpinSpeed);
+    DECLARE_INSTANCE_FIELD_PRIVATE(float, _finalSpinSpeed);
 
     DECLARE_INSTANCE_METHOD(void, OnTrickStart);
     DECLARE_INSTANCE_METHOD(void, OnTrickEndRequested);
@@ -23,4 +23,4 @@ DECLARE_CLASS_CUSTOM(TrickSaber::Tricks, SpinTrick, TrickSaber::Tricks::Trick,
     private:
         custom_types::Helpers::Coroutine LerpToOriginalRotation();
         custom_types::Helpers::Coroutine CompleteRotation();
-)
+};

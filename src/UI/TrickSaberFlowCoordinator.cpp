@@ -1,8 +1,7 @@
 #include "UI/TrickSaberFlowCoordinator.hpp"
 #include "config.hpp"
 
-#include "HMUI/ViewController_AnimationDirection.hpp"
-#include "HMUI/ViewController_AnimationType.hpp"
+#include "HMUI/ViewController.hpp"
 
 DEFINE_TYPE(TrickSaber::UI, TrickSaberFlowCoordinator);
 
@@ -25,7 +24,7 @@ namespace TrickSaber::UI {
     }
 
     void TrickSaberFlowCoordinator::BackButtonWasPressed(HMUI::ViewController* topViewController) {
-        parentFlowCoordinator->DismissFlowCoordinator(this, HMUI::ViewController::AnimationDirection::Horizontal, nullptr, false);
+        _parentFlowCoordinator->DismissFlowCoordinator(this, HMUI::ViewController::AnimationDirection::Horizontal, nullptr, false);
     }
 
 }

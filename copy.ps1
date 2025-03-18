@@ -1,21 +1,27 @@
 param (
     [Parameter(Mandatory=$false)]
-    [Switch]$debug_so,
+    [Switch] $clean,
+    [Parameter(Mandatory=$false)]
+    [Switch] $useDebug,
+    [Parameter(Mandatory=$false)]
+    [Switch]$release,
     [Parameter(Mandatory=$false)]
     [Switch]$log
 )
 
-& ./build.ps1
+& $PSScriptRoot/build.ps1 -clean:$clean -release:$release
 if (-not ($LastExitCode -eq 0)) {
     echo "build failed, not copying"
     exit
 }
 
-if ($debug_so.IsPresent) {
-    & adb push build/debug/libtrick-saber.so /sdcard/Android/data/com.beatgames.beatsaber/files/mods/libtrick-saber.so
+if ($useDebug -eq $true) {
+    $fileName = Get-ChildItem lib*.so -Path "build/debug" -Name
 } else {
-    & adb push build/libtrick-saber.so /sdcard/Android/data/com.beatgames.beatsaber/files/mods/libtrick-saber.so
+    $fileName = Get-ChildItem lib*.so -Path "build/" -Name
 }
+
+& adb push build/$fileName /sdcard/ModData/com.beatgames.beatsaber/Modloader/mods/$fileName
 
 & adb shell am force-stop com.beatgames.beatsaber
 & adb shell am start com.beatgames.beatsaber/com.unity3d.player.UnityPlayerActivity

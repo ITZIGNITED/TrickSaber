@@ -6,7 +6,7 @@
 #include "GlobalNamespace/LevelBar.hpp"
 #include "UnityEngine/Transform.hpp"
 #include "UnityEngine/RectTransform.hpp"
-#include "UnityEngine/UI/Toggle_ToggleEvent.hpp"
+#include "UnityEngine/UI/Toggle.hpp"
 #include "UnityEngine/Canvas.hpp"
 #include "HMUI/CurvedTextMeshPro.hpp"
 
@@ -18,11 +18,11 @@
 #undef protected
 
 #include "bsml/shared/BSML/Components/Settings/ToggleSetting.hpp"
-
+#include "scotland2/shared/loader.hpp"
 
 DEFINE_TYPE(TrickSaber, GameplayManager);
 
-extern ModInfo modInfo;
+extern modloader::ModInfo modInfo;
 
 namespace TrickSaber {
     void GameplayManager::ctor(::Zenject::DiContainer* container) {
@@ -55,12 +55,12 @@ namespace TrickSaber {
         return;
         if (!_pauseMenuManager || !_pauseMenuManager->m_CachedPtr.m_value) return;
 
-        auto canvas = _pauseMenuManager->levelBar->get_transform()->get_parent()->get_parent()->GetComponent<UnityEngine::Canvas*>();
+        auto canvas = _pauseMenuManager->_levelBar->get_transform()->get_parent()->get_parent()->GetComponent<UnityEngine::Canvas*>();
         if (!canvas) return;
 
         auto toggleObject = BSML::ToggleSettingTag().CreateObject(canvas->get_transform());
 
-        auto rectTransform = reinterpret_cast<UnityEngine::RectTransform*>(toggleObject->get_transform());
+        auto rectTransform = toggleObject->transform.cast<UnityEngine::RectTransform>();
         rectTransform->set_anchoredPosition({26, -15});
         rectTransform->set_sizeDelta({-130, 7});
 

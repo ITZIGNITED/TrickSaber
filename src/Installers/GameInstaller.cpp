@@ -48,7 +48,7 @@ namespace TrickSaber::Installers {
         container->Bind<InputHandling::InputManager*>()->AsTransient();
 
         container->Bind<SaberControllerBearer*>()->AsSingle();
-        
+
         //TODO: make SaberTrickManagers non-Monobehaviours
         BindTrickManager(GlobalNamespace::SaberType::SaberA);
         BindTrickManager(GlobalNamespace::SaberType::SaberB);
@@ -58,12 +58,12 @@ namespace TrickSaber::Installers {
 
     void GameInstaller::BindTrickManager(GlobalNamespace::SaberType saberType) {
         //DEBUG("BindTrickManager: {}", saberType);
-        auto func = custom_types::MakeDelegate<System::Func_2<::Zenject::InjectContext*, UnityEngine::GameObject*>*>(
-            std::function<::UnityEngine::GameObject*(::Zenject::InjectContext*)>(
+        auto func = custom_types::MakeDelegate<System::Func_2<::Zenject::InjectContext*, UnityW<UnityEngine::GameObject>>*>(
+            std::function<UnityW<UnityEngine::GameObject>(::Zenject::InjectContext*)>(
                 std::bind(&GameInstaller::GetSaber, this, std::placeholders::_1, saberType)
             )
         );
-        
+
         if (saberType == GlobalNamespace::SaberType::SaberA) {
             auto cachedResult = get_Container()
                 ->Bind<LeftSaberTrickManager*>()

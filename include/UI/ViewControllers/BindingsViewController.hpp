@@ -6,9 +6,9 @@
 #include "HMUI/ViewController.hpp"
 #include "UnityEngine/Transform.hpp"
 
-DECLARE_CLASS_CODEGEN(TrickSaber::UI::ViewControllers, BindingsViewController, HMUI::ViewController,
+DECLARE_CLASS_CODEGEN(TrickSaber::UI::ViewControllers, BindingsViewController, HMUI::ViewController) {
     DECLARE_INSTANCE_FIELD(UnityEngine::Transform*, multiBindingTextLayout);
-    DECLARE_OVERRIDE_METHOD(void, DidActivate, il2cpp_utils::il2cpp_type_check::MetadataGetter<&HMUI::ViewController::DidActivate>::get(), bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
     DECLARE_INSTANCE_METHOD(void, CheckMultiBinding);
 
     BSML_OPTIONS_LIST_OBJECT(trickActionEnum, "None", "Spin", "Throw");
@@ -25,5 +25,4 @@ DECLARE_CLASS_CODEGEN(TrickSaber::UI::ViewControllers, BindingsViewController, H
     DECLARE_BSML_PROPERTY(bool, reverseTrigger);
     DECLARE_BSML_PROPERTY(bool, reverseGrip);
     DECLARE_BSML_PROPERTY(bool, reverseThumbstick);
-
-)
+};

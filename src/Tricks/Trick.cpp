@@ -72,6 +72,6 @@ namespace TrickSaber::Tricks {
     }
 
     Trick* TrickCustomFactory::Create(System::Type* type, ::UnityEngine::GameObject* gameObject) {
-        return reinterpret_cast<Trick*>(_container->InstantiateComponent(type, gameObject));
+        return reinterpret_cast<Trick*>(_container->InstantiateComponent(type, gameObject).ptr());
     }
 }

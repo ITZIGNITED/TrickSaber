@@ -5,7 +5,8 @@
 #include "config.hpp"
 
 #include "UnityEngine/WaitForSeconds.hpp"
-#include "GlobalNamespace/SharedCoroutineStarter.hpp"
+#include "UnityEngine/Quaternion.hpp"
+#include "bsml/shared/BSML/SharedCoroutineStarter.hpp"
 
 DEFINE_TYPE(TrickSaber, SaberTrickModel);
 
@@ -42,7 +43,7 @@ namespace TrickSaber {
     }
 
     custom_types::Helpers::Coroutine SaberTrickModel::Init(GlobalNamespace::Saber* saber, bool& result) {
-        co_yield reinterpret_cast<System::Collections::IEnumerator*>(GlobalNamespace::SharedCoroutineStarter::get_instance()->StartCoroutine(custom_types::Helpers::CoroutineHelper::New(GetSaberModel(saber, _originalSaberModel))));
+        co_yield reinterpret_cast<System::Collections::IEnumerator*>(BSML::SharedCoroutineStarter::get_instance()->StartCoroutine(custom_types::Helpers::CoroutineHelper::New(GetSaberModel(saber, _originalSaberModel))));
 
         if (!_originalSaberModel) {
             result = false;
@@ -62,8 +63,8 @@ namespace TrickSaber {
         } else {
             // Parent transforms to Saber to affect cut collisions
             // Trails are also fixed by using this
-            saber->saberBladeTopTransform->SetParent(_trickModel->get_transform(), true);
-            saber->saberBladeBottomTransform->SetParent(_trickModel->get_transform(), true);
+            saber->_saberBladeTopTransform->SetParent(_trickModel->get_transform(), true);
+            saber->_saberBladeBottomTransform->SetParent(_trickModel->get_transform(), true);
         }
 
         result = true;
@@ -71,12 +72,12 @@ namespace TrickSaber {
     }
 
     custom_types::Helpers::Coroutine SaberTrickModel::GetSaberModel(GlobalNamespace::Saber* saber, UnityEngine::GameObject*& result) {
-        GlobalNamespace::SaberModelController* smc = nullptr; 
-        
+        GlobalNamespace::SaberModelController* smc = nullptr;
+
         static constexpr const float timeout = 2.0f;
         static constexpr const float interval = 0.3f;
         float time = 0;
-        
+
         while (!smc && saber && saber->m_CachedPtr.m_value) {
             smc = saber->GetComponentInChildren<GlobalNamespace::SaberModelController*>(true);
             if (smc) {

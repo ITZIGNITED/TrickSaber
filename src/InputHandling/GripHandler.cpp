@@ -1,7 +1,6 @@
 #include "InputHandling/GripHandler.hpp"
 
 #include "GlobalNamespace/OVRInput.hpp"
-#include "GlobalNamespace/OVRInput_Axis1D.hpp"
 
 namespace TrickSaber::InputHandling {
     GripHandler::GripHandler(GlobalNamespace::OVRInput::Controller oculusController, UnityEngine::XR::InputDevice controllerInputDevice, float threshold, bool isReversed): InputHandler(threshold, isReversed) {

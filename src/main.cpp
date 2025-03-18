@@ -1,6 +1,7 @@
 #include "logging.hpp"
 #include "hooking.hpp"
 #include "config.hpp"
+#include "scotland2/shared/loader.hpp"
 
 #include "custom-types/shared/register.hpp"
 #include "lapiz/shared/zenject/Zenjector.hpp"
@@ -14,19 +15,19 @@
 #include "bsml/shared/BSMLDataCache.hpp"
 #include "assets.hpp"
 
-ModInfo modInfo{MOD_ID, VERSION};
+modloader::ModInfo modInfo = {MOD_ID, VERSION, 0};
 
-extern "C" void setup(ModInfo& info) {
-    info = modInfo;
+extern "C" __attribute__((visibility("default"))) void setup(CModInfo& info) {
+    modInfo.assign(info);
 }
 
-extern "C" void load() {
+extern "C" __attribute__((visibility("default"))) void late_load() {
     if (!LoadConfig()) SaveConfig();
     il2cpp_functions::Init();
     custom_types::Register::AutoRegister();
     Lapiz::Attributes::AutoRegister();
 
-    Hooks::InstallHooks(getLogger());
+    Hooks::InstallHooks();
 
     auto zenjector = Lapiz::Zenject::Zenjector::Get();
     zenjector->Install<TrickSaber::Installers::MenuInstaller*>(Lapiz::Zenject::Location::Menu);

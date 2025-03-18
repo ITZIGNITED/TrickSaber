@@ -5,7 +5,7 @@
 #include "bsml/shared/BSML/MenuButtons/MenuButtons.hpp"
 #include "bsml/shared/BSML.hpp"
 
-#include "HMUI/ViewController_AnimationDirection.hpp"
+#include "HMUI/ViewController.hpp"
 
 DEFINE_TYPE(TrickSaber::UI, SettingsUI);
 
