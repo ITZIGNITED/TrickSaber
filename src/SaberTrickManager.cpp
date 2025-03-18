@@ -75,7 +75,9 @@ namespace TrickSaber {
         auto success = false;
         co_yield reinterpret_cast<System::Collections::IEnumerator*>(BSML::SharedCoroutineStarter::get_instance()->StartCoroutine(custom_types::Helpers::CoroutineHelper::New(_saberTrickModel->Init(_saber, success))));
 
-        if (success) INFO("Got saber model");
+        if (success) {
+            INFO("Got saber model");
+        }
         else {
             ERROR("Couldn't get saber model");
             Cleanup();
@@ -113,10 +115,9 @@ namespace TrickSaber {
     }
 
     void SaberTrickManager::Cleanup() {
-        auto values = _tricks->get_Values();
-        auto iter = values->GetEnumerator();
+        auto iter = _tricks->GetEnumerator();
         while (iter.MoveNext()) {
-            UnityEngine::Object::DestroyImmediate(reinterpret_cast<Tricks::Trick*>(iter.get_Current()));
+            UnityEngine::Object::DestroyImmediate(static_cast<Tricks::Trick*>(iter.get_Current().get_Value()));
         }
         iter.Dispose();
 
@@ -187,10 +188,9 @@ namespace TrickSaber {
     }
 
     void SaberTrickManager::EndAllTricks() {
-        auto values = _tricks->get_Values();
-        auto iter = values->GetEnumerator();
+        auto iter = _tricks->GetEnumerator();
         while (iter.MoveNext()) {
-            reinterpret_cast<Tricks::Trick*>(iter.get_Current())->OnTrickEndImmediately_base();
+            reinterpret_cast<Tricks::Trick*>(iter.get_Current().get_Value())->OnTrickEndImmediately_base();
         }
         iter.Dispose();
     }
